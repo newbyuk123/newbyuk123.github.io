@@ -1,0 +1,109 @@
+
+@font-face{
+font-family: sitefont;
+src: url(Caviar.ttf);
+}
+html {
+    
+} 
+
+
+body {
+    background-color:#FECEAB;
+}
+
+
+.navigation a:link {
+    color:black;
+    text-decoration: none;
+}
+
+.navigation a:visited {
+        color:black;
+        text-decoration: none;
+}
+
+
+.navigation ol {
+    margin: 00;
+    padding: 00;
+    overflow: hidden;
+    background-color:#2A363B;
+    height: 60px;
+    font-family: 'Gill Sans', 'Gill Sans MT';
+    
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100%;
+
+}
+
+
+.navigation li {
+display: table-cell;
+text-align: center;
+vertical-align: middle;
+float: left;
+width: 100px;
+padding:30;
+}
+
+.travel_para
+{
+color:2A363B;
+font-family: 'Gill Sans', 'Gill Sans MT';
+padding-top: 50px;  
+;
+
+}
+
+#frontname {
+font-family: sitefont;
+font-size: 56px;
+margin: auto;
+color:FECEAB ;
+padding-top: 200px;
+padding-left: 200px;
+} 
+
+#smaller {
+font-family: sitefont;
+font-size: 20px;
+padding-left: 200;
+color:99B898 ;
+} 
+
+#smaller a:link {
+    color:inherit;
+    text-decoration: none;
+}
+
+#smaller a:visited {
+        color:inherit;
+        text-decoration: none;
+}
+
+
+#smaller ol {
+    margin: 15;
+    padding: 0;
+    overflow: hidden;
+    height: 60px; 
+}
+
+#smaller li {
+display: table-cell;
+text-align: center;
+vertical-align: middle;
+float: left;
+width: 100px;
+}
+
+#aboutmetext {
+    padding-top: 50;
+    padding-left: 50;
+    color:FECEAB;
+    font-family: 'Gill Sans', 'Gill Sans MT';
+}
