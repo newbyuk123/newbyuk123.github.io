@@ -1,0 +1,78 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<script>
+    var kingList = [];
+
+    function loadData() {
+        var requestURL = 'https://raw.githubusercontent.com/ewomackQA/JSONDataRepo/master/kings.json';
+        var request = new XMLHttpRequest();
+        request.open('GET', requestURL);
+        request.responseType = 'json'
+        request.send();
+        request.onload = function () {
+            var kings = request.response;
+            loadPageWithData(kings);
+        }
+    }
+
+    function loadPageWithData(kings) {
+        for (var i = 0; i < kings.length; i++) {
+            kingList.push(kings[i]);
+        }
+        search();
+    }
+
+    loadData();
+
+    function search() {
+        var kingNameToSearch = document.getElementById("kingsInput").value
+        var totalListOutput = "";
+        for (var i = 0; i < kingList.length; i++) {
+            if (kingList[i].nm.toLowerCase().includes(kingNameToSearch.toLowerCase())) {
+                totalListOutput += "<option>";
+                totalListOutput += kingList[i].nm;
+                totalListOutput += "</option>";
+            }
+        }
+        document.getElementById("output").innerHTML = totalListOutput;
+    }
+
+    function loadKing() {
+        var listBox = document.getElementById("output");
+        var selectedName = listBox.options[listBox.selectedIndex].value
+        var output2 = "";
+        for (var i = 0; i < kingList.length; i++) {
+            if (kingList[i].nm == selectedName) {
+                output2 += "<b> Name: </b>" + kingList[i].nm;
+                output2 += "<br><b> City: </b>" + kingList[i].cty;
+                output2 += "<br><b> House: </b>" + kingList[i].hse
+                output2 += "<br><b> Reign: </b>" + kingList[i].yrs +"<br><br>";
+            }
+        }document.getElementById("individualOutput").innerHTML = output2;
+    }
+
+
+</script>
+
+<body>
+
+    <h2>King Search</h2>
+
+    <input type="text" id="kingsInput" onkeyup="search()" />
+    <button onclick="search()">Search</button>
+    <br><br>
+    <select id="output" size="10" onchange="loadKing()" style="min-width:171px"></select>
+    
+    <p id="individualOutput"></p>
+
+
+</body>
+
+</html>
