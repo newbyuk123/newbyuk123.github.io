@@ -1,0 +1,228 @@
+<html>
+<head>
+    
+    <link href="watches.css" rel="stylesheet" type="text/css">
+    
+    <title>Watch Collection</title>
+</head>
+<body>
+
+    
+<script>
+
+
+
+var watchList = []
+
+function createwatch( price, make, model, colour, movement){
+    var watchObject = {
+        price: price,
+        make:make,
+        model: model,
+        colour: colour,
+        movement: movement,
+        }
+
+    var request = new Request("http://localhost:3000/watch", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(watchObject)
+        });
+        fetch(request).then((response) => {
+            response.json().then(body => {
+                watchList.push(body);
+                outputList();
+            });
+        });
+
+
+// watchList.push(watchObject);
+
+//     document.getElementById("inputMake").value =""
+//     document.getElementById("inputPrice").value = ""
+//     document.getElementById("inputColour").value = ""
+//     document.getElementById("inputModel").value = ""
+//     document.getElementById("inputMovement").value = ""
+
+
+}
+
+
+// Output
+function outputList(){
+    var watchOutput="";
+
+    for(var i=0; i<watchList.length; i++) {
+        watchOutput += "<option>";
+        watchOutput += watchList[i].make +" " + watchList[i].model
+        watchOutput += "</option>";
+    
+    }
+document.getElementById("output").innerHTML = watchOutput;
+
+}
+
+// Delete
+function deletewatch(modelToDelete){
+    var watchToDelete = watchList.find((watch) => watch.model == modelToDelete);
+        if (watchToDelete) {
+            var request = new Request("http://localhost:3000/watch/" + watchToDelete._id, {
+                method: "Delete"
+            });
+            fetch(request).then(outputList);
+        }
+    
+    for(var i=0; i<watchList.length; i++) {
+        if(watchList[i].model == modelToDelete){
+        watchList.splice(i,1);
+        }
+    }
+}
+
+function createwatchFromForm(){
+    var make = document.getElementById("inputMake").value;
+    var price = document.getElementById("inputPrice").value;
+    var colour = document.getElementById("inputColour").value;
+    var movement = document.getElementById("inputMovement").value;
+    var model = document.getElementById("inputModel").value;
+       
+     if (model == "") {
+            alert("NEED MODEL");
+        } else {
+   
+    createwatch(price, make, model, colour, movement)
+    outputList();
+        }
+}
+
+function deleteAndUpdateScreen(){
+    var model = document.getElementById("deleteModel").value;
+    
+    if (model == "") {
+            alert("NEED MODEL");
+        }
+    
+    else {
+    deletewatch(model);
+    outputList();
+        }
+
+}
+
+function loadwatch(){
+    var listBox = document.getElementById("output");
+    var selectedModel = listBox.options[listBox.selectedIndex].value
+
+    for(var i=0; i<watchList.length; i++) {
+        if(watchList[i].make +" "+ watchList[i].model == selectedModel){
+        var output="";
+        output += "<b> Make: </b>" + watchList[i].make + " ";
+        output += "<br><b> Model: </b>" + watchList[i].model + " ";
+        output += "<br><b> Colour: </b>" + watchList[i].colour + " ";
+        output += "<br><b> Movement: </b>" + watchList[i].movement + " ";
+        output += "<br><b> Price paid: </b>" + watchList[i].price + " ";  
+        
+        document.getElementById("individualOutput").innerHTML = output
+        }            
+    }
+}
+
+    function upperCaseF(e) {
+        e.value = e.value.toUpperCase();
+    }
+
+    function createWatchOnEnter(e) {
+        //e.keyCode gets numerical representation of key pressed
+        //13 is enter key
+        if (e.keyCode == 13) {
+            createWatchFromForm();
+        }
+    }
+
+    function deleteWatchOnEnter(e) {
+        if (e.keyCode == 13) {
+            deleteAndUpdateScreen();
+        }
+    }
+
+
+    function getWatchesFromDatabase() {
+        fetch("http://localhost:3000/watch").then((response) => {
+            response.json().then((body) => {
+                watchList = body;
+                outputList();
+            });
+        });
+    }
+
+    getWatchesFromDatabase();
+
+
+// function search() {
+//         var watchToSearch = document.getElementById("watchInput").value
+//         var totalListOutput = "";
+//         for (var i = 0; i < watchList.length; i++) {
+//             if (watchList[i].model.toLowerCase() .includes (watchToSearch.toLowerCase())) {
+//                 totalListOutput += "<option>";
+//                 totalListOutput += watchList[i].model;
+//                 totalListOutput += "</option>";
+//             }
+//         }
+//         document.getElementById("output").innerHTML = totalListOutput;
+// }
+
+
+</script>
+
+<div id="left"></div>
+<div id="right"></div>
+<div id="top"></div>
+<div id="bottom"></div>
+
+<div id="main">
+
+<h1>Create Watch</h1>
+
+<div id="createwatchId">
+
+Make : <input type="text" id="inputMake" placeholder="enter make..."></input><br><br>
+Model: <input type="text" id="inputModel" placeholder="enter model..."></input><br><br>
+Color: <input type="text" id="inputColour"placeholder="enter color..."></input><br><br>
+Movement: <input type="text" id="inputMovement"placeholder="enter movement..."></input><br><br>
+Price paid: <input type="text" id="inputPrice" placeholder="enter price..."></input><br><br>
+<button onclick="createwatchFromForm()">Create watch</button><br>
+</div>
+
+
+<hr>
+<h1>Delete Watch</h1>
+
+Model: <input type="text" id="deleteModel" placeholder="enter model..."></input><br><br>
+<button onclick="deleteAndUpdateScreen()">Delete watch</button><br>
+
+<hr>
+<h1>Watch List</h1>
+<div id="watchList">
+ <div id="watchListLeft">   
+<select id="output" size="6" onchange="loadwatch()" style="min-width:100px">
+</select>
+ </div>
+
+
+<div id="watchListRight">  
+
+
+<p id="individualOutput"></p>
+</div>
+</div>
+
+<br>
+Search: <input type="text" id="watchInput" onkeyup="search()" placeholder="search..." />
+    
+
+
+
+</body>
+</html>

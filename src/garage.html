@@ -1,0 +1,164 @@
+<html>
+<head>
+    
+    <link href="garage.css" rel="stylesheet" type="text/css">
+    
+    <title>Garage</title>
+</head>
+<body>
+
+    
+<script>
+
+
+
+var carList = []
+
+function createCar( age, make, registration, colour){
+    var carObject = {
+        age: age,
+        make:make,
+        registration: registration,
+        colour: colour
+        }
+carList.push(carObject);
+
+    document.getElementById("inputMake").value =""
+    document.getElementById("inputAge").value = ""
+    document.getElementById("inputColour").value = ""
+    document.getElementById("inputReg").value = ""
+
+
+}
+
+
+// Output
+function outputList(){
+    var carOutput="";
+
+    for(var i=0; i<carList.length; i++) {
+        carOutput += "<option>";
+        carOutput += carList[i].registration;
+        // carOutput += "<b> Age: </b>" + carList[i].age + " ";
+        // carOutput += "<b> Make: </b>" + carList[i].make + " ";
+        // carOutput += "<b> Colour: </b>" + carList[i].colour + " ";
+        carOutput += "</option>";
+    
+    }
+document.getElementById("output").innerHTML = carOutput;
+
+}
+
+// Delete
+function deleteCar(registrationToDelete){
+    for(var i=0; i<carList.length; i++) {
+        if(carList[i].registration == registrationToDelete){
+        carList.splice(i,1);
+        }
+    }
+}
+
+function createCarFromForm(){
+    var make = document.getElementById("inputMake").value;
+    var age = document.getElementById("inputAge").value;
+    var colour = document.getElementById("inputColour").value;
+    var regString = document.getElementById("inputReg").value;
+    var registration = regString.toUpperCase();
+    createCar(age, make, registration, colour)
+    outputList();
+
+}
+
+function deleteAndUpdateScreen(){
+    var regString = document.getElementById("deleteReg").value;
+    var registration = regString.toUpperCase();
+    
+    deleteCar(registration);
+    outputList();
+    document.getElementById("deleteReg").value = "";
+
+
+}
+
+function loadCar(){
+    var listBox = document.getElementById("output");
+    var selectedReg = listBox.options[listBox.selectedIndex].value
+
+    for(var i=0; i<carList.length; i++) {
+        if(carList[i].registration == selectedReg){
+        var output="";
+        output += "<b> Registration: </b>" + carList[i].registration + " ";
+        output += "<br><b> Age: </b>" + carList[i].age + " ";
+        output += "<br><b> Make: </b>" + carList[i].make + " ";
+        output += "<br><b> Colour: </b>" + carList[i].colour + " ";   
+        
+        document.getElementById("individualOutput").innerHTML = output
+        }            
+    }
+}
+
+
+function search() {
+        var carToSearch = document.getElementById("carInput").value
+        var totalListOutput = "";
+        for (var i = 0; i < carList.length; i++) {
+            if (carList[i].registration.toLowerCase().includes(carToSearch.toLowerCase())) {
+                totalListOutput += "<option>";
+                totalListOutput += carList[i].registration;
+                totalListOutput += "</option>";
+            }
+        }
+        document.getElementById("output").innerHTML = totalListOutput;
+}
+
+
+</script>
+
+<div id="left"></div>
+<div id="right"></div>
+<div id="top"></div>
+<div id="bottom"></div>
+
+<div id="main">
+
+<h1>Create Car</h1>
+
+<div id="createCarId">
+Year : <input type="text" id="inputAge" placeholder="enter year..."></input><br><br>
+Make : <input type="text" id="inputMake" placeholder="enter make..."></input><br><br>
+RegNo: <input type="text" id="inputReg" placeholder="enter reg number..."></input><br><br>
+Color: <input type="text" id="inputColour"placeholder="enter color..."></input><br><br>
+<button onclick="createCarFromForm()">Create Car</button><br>
+</div>
+
+
+<hr>
+<h1>Delete Car</h1>
+
+RegNo: <input type="text" id="deleteReg" placeholder="enter reg number..."></input><br><br>
+<button onclick="deleteAndUpdateScreen()">Delete Car</button><br>
+
+<hr>
+<h1>Car List</h1>
+<div id="carList">
+ <div id="carListLeft">   
+<select id="output" size="6" onchange="loadCar()" style="min-width:100px">
+</select>
+ </div>
+
+
+<div id="carListRight">  
+
+
+<p id="individualOutput"></p>
+</div>
+</div>
+
+<br>
+Search: <input type="text" id="carInput" onkeyup="search()" placeholder="search..." />
+    
+
+
+
+</body>
+</html>
